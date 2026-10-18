@@ -1,59 +1,74 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Emulador GBC Web</title>
+    <title>Mi Consola Web Retro (GBC & PS1)</title>
     <style>
         body {
-            background-color: #121212;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
         }
-        h1 { margin-bottom: 10px; font-size: 1.5rem; }
+        h1 { margin-bottom: 5px; font-size: 1.8rem; color: #38bdf8; }
+        .subtitle { color: #94a3b8; margin-bottom: 20px; font-size: 0.95rem; }
+        
         #game-container {
-            width: 640px;
-            height: 576px;
+            width: 800px;
+            height: 600px;
             max-width: 100%;
             background: #000;
-            border: 4px solid #333;
-            border-radius: 8px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+            border: 4px solid #1e293b;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+            overflow: hidden;
         }
         .instructions {
             margin-top: 15px;
             font-size: 0.9rem;
-            color: #aaa;
+            color: #94a3b8;
             text-align: center;
+            background: #1e293b;
+            padding: 10px 20px;
+            border-radius: 8px;
         }
     </style>
 </head>
 <body>
 
-    <h1>Game Boy Color Web</h1>
+    <h1>RetroCloud Web</h1>
+    <div class="subtitle">Emulador Web multi-consola (GBC, PS1 y enlaces de PS2)</div>
     
-    <!-- Contenedor del Emulador -->
+    <!-- Contenedor donde se montará el emulador -->
     <div id="game-container"></div>
 
     <div class="instructions">
-        <p>Usa las flechas del teclado / A, S, Enter, Espacio o conecta tu control.</p>
+        <p>🎮 **Controles:** Teclado configurado o conecta tu Control de PS5 por USB/Bluetooth.</p>
     </div>
 
-    <!-- Script de EmuJS para Game Boy Color -->
+    <!-- Configuración de EmuJS para múltiples sistemas -->
     <script>
         EmuJS = {
-            game: "pokemon_rojo", // Aquí definiremos la ROM de prueba
-            system: "gbc",
-            // Configuración básica para cargar ROMs y emular
+            // Contenedor visual
+            element: document.getElementById("game-container"),
+            
+            // Aquí definiremos las rutas de tus juegos (ROMs)
+            // Para GBC y PS1 correrán directo en el navegador via WebAssembly.
+            gameUrl: "roms/game.gbc", // Cambiarás esto según el juego que cargues
+            system: "gbc", // Cambia a "psx" para PlayStation 1
+            
+            // Ajustes visuales y de rendimiento
+            resolution: "auto",
+            unmuteBG: true
         };
     </script>
-    <!-- Cargamos el script principal de EmuJS -->
+    <!-- Cargador oficial de EmuJS -->
     <script src="https://emujs.org/embed.js"></script>
 
 </body>
