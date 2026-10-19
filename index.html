@@ -1,9 +1,9 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Consola Web Retro (GBC & PS1)</title>
+    <title>RetroCloud Web - GBC, PS1 & PSP</title>
     <style>
         body {
             background-color: #0f172a;
@@ -12,16 +12,34 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             min-height: 100vh;
             margin: 0;
+            padding: 20px;
         }
         h1 { margin-bottom: 5px; font-size: 1.8rem; color: #38bdf8; }
         .subtitle { color: #94a3b8; margin-bottom: 20px; font-size: 0.95rem; }
         
+        /* Selector de consolas y juegos */
+        .menu-bar {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        select, button {
+            background: #1e293b;
+            color: #fff;
+            border: 1px solid #334155;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        select:hover, button:hover { background: #334155; }
+
         #game-container {
             width: 800px;
-            height: 600px;
+            height: 500px;
             max-width: 100%;
             background: #000;
             border: 4px solid #1e293b;
@@ -43,30 +61,55 @@
 <body>
 
     <h1>RetroCloud Web</h1>
-    <div class="subtitle">Emulador Web multi-consola (GBC, PS1 y enlaces de PS2)</div>
+    <div class="subtitle">Emulador Web: Game Boy Color, PS1 y PSP</div>
     
+    <!-- Menú para seleccionar el sistema y cargar juego -->
+    <div class="menu-bar">
+        <select id="system-select">
+            <option value="gbc">Game Boy Color (GBC)</option>
+            <option value="psx">PlayStation 1 (PS1)</option>
+            <option value="psp">PlayStation Portable (PSP)</option>
+        </select>
+        <button onclick="cargarJuego()">Cargar Juego</button>
+    </div>
+
     <!-- Contenedor donde se montará el emulador -->
     <div id="game-container"></div>
 
     <div class="instructions">
-        <p>🎮 **Controles:** Teclado configurado o conecta tu Control de PS5 por USB/Bluetooth.</p>
+        <p>🎮 **Controles:** Teclado o conecta tu Control de PS5 por USB/Bluetooth.</p>
     </div>
 
-    <!-- Configuración de EmuJS para múltiples sistemas -->
+    <!-- Script de configuración y carga de EmuJS -->
     <script>
-        EmuJS = {
-            // Contenedor visual
+        // Configuración inicial por defecto (GBC)
+        window.EmuJS = {
             element: document.getElementById("game-container"),
-            
-            // Aquí definiremos las rutas de tus juegos (ROMs)
-            // Para GBC y PS1 correrán directo en el navegador via WebAssembly.
-            gameUrl: "roms/game.gbc", // Cambiarás esto según el juego que cargues
-            system: "gbc", // Cambia a "psx" para PlayStation 1
-            
-            // Ajustes visuales y de rendimiento
+            gameUrl: "roms/game.gbc", // Cambiarás por la ruta de tu ROM
+            system: "gbc",
             resolution: "auto",
             unmuteBG: true
         };
+
+        function cargarJuego() {
+            const sistemaSeleccionado = document.getElementById("system-select").value;
+            
+            // Aquí puedes personalizar las rutas de ejemplo según lo que subas a tu servidor/repositorio
+            let urlRom = "";
+            if (sistemaSeleccionado === "gbc") {
+                urlRom = "roms/game.gbc";
+            } else if (sistemaSeleccionado === "psx") {
+                urlRom = "roms/game.bin"; // o .chd/.cue
+            } else if (sistemaSeleccionado === "psp") {
+                urlRom = "roms/game.iso"; // Los juegos de PSP van en formato ISO o CSO
+            }
+
+            // Actualizamos la configuración del emulador dinámicamente
+            window.EmuJS.system = sistemaSeleccionado;
+            window.EmuJS.gameUrl = urlRom;
+            
+            alert(`Cambiado a sistema: ${sistemaSeleccionado.toUpperCase()}. Asegúrate de que la ROM esté en la ruta correspondiente.`);
+        }
     </script>
     <!-- Cargador oficial de EmuJS -->
     <script src="https://emujs.org/embed.js"></script>
